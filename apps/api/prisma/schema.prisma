@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+
+  @@map("users")
+}
+
+model Smoothie {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  image       String?
+  ingredients Ingredient[]
+
+  @@map("smoothies")
+}
+
+model Ingredient {
+  id         Int      @id @default(autoincrement())
+  name       String
+  quantity   String
+  smoothieId Int
+  Smoothie   Smoothie @relation(fields: [smoothieId], references: [id])
+
+  @@map("ingredients")
+}
